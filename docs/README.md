@@ -1,4 +1,4 @@
-# wvu-purchases
+# wvu-purchases 💸
 
 **NOTE**: This is currently a work in progress.
 
@@ -29,4 +29,4 @@ Current data spans from **Jan 26, 2017** to **Dec 2, 2021**.
 
 ### License
 
-See [LICENSE.txt](./LICENSE.txt).
+This project is released into the public domain via Creative Commons Zero. See the [LICENSE](./LICENSE) file.
