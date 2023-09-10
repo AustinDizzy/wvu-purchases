@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/urfave/cli/v3"
 	"github.com/xuri/excelize/v2"
@@ -17,33 +18,44 @@ func ingest(c *cli.Context) error {
 		log.Fatal("no input file specified")
 	}
 
-	if !(c.String("type") == "procurement" || c.String("type") == "pcard") {
+	if !(c.String("type") == ProcurementRecordType || c.String("type") == PCardRecordType) {
 		log.Fatal("invalid record type specified")
 	}
 
-	var err error
+	records, err := xlsxToRecords(inFile, c.String("type"))
+	if err != nil {
+		log.Fatal("error converting xlsx to records: ", err)
+	}
+
 	switch c.String("type") {
 	case "procurement":
-		var records []ProcurementRecord
-		records, err = xlsxToRecords(inFile)
-		if err != nil {
-			log.Fatal("error converting xlsx to records: ", err)
+		var pcpsRecords []ProcurementRecord
+		for _, r := range records {
+			pcpsRecords = append(pcpsRecords, r.ProcurementRecord)
 		}
-		err = recordsToDB(records, c.String("db"), c.Bool("overwrite"))
+
+		err = recordsToDB(pcpsRecords, c.String("db"), c.Bool("overwrite"))
 	case "pcard":
-		log.Println("TODO: pcard")
+		var pcardRecords []PCardRecord
+		for _, r := range records {
+			pcardRecords = append(pcardRecords, r.PCardRecord)
+		}
+
+		err = recordsToDB(pcardRecords, c.String("db"), c.Bool("overwrite"))
 	}
 
 	return err
 }
 
-func recordsToDB(records []ProcurementRecord, dbFile string, overwrite bool) error {
+func recordsToDB[T ProcurementRecord | PCardRecord](records []T, dbFile string, overwrite bool) error {
 	db, err := gorm.Open(sqlite.Open(dbFile), &gorm.Config{})
 	if err != nil {
 		return fmt.Errorf("error opening database: %w", err)
 	}
 
-	if err := db.AutoMigrate(&ProcurementRecord{}); err != nil {
+	reflect.ValueOf(&records).Elem()
+
+	if err := db.AutoMigrate(new(T)); err != nil {
 		return fmt.Errorf("error migrating database: %w", err)
 	}
 
@@ -67,7 +79,7 @@ func recordsToDB(records []ProcurementRecord, dbFile string, overwrite bool) err
 	return nil
 }
 
-func xlsxToRecords(filename string) ([]ProcurementRecord, error) {
+func xlsxToRecords(filename string, recordType string) ([]Record, error) {
 	f, err := excelize.OpenFile(filename)
 	if err != nil {
 		return nil, fmt.Errorf("error opening input file: %w", err)
@@ -75,7 +87,12 @@ func xlsxToRecords(filename string) ([]ProcurementRecord, error) {
 
 	defer f.Close()
 
-	rows, err := f.Rows("Sheet1")
+	sh, err := selectSheet(f)
+	if err != nil {
+		return nil, fmt.Errorf("error selecting sheet: %w", err)
+	}
+
+	rows, err := f.Rows(sh)
 	if err != nil {
 		return nil, fmt.Errorf("error getting rows from sheet: %w", err)
 	}
@@ -83,14 +100,14 @@ func xlsxToRecords(filename string) ([]ProcurementRecord, error) {
 	var (
 		i       = 0
 		dec     *RecordDecoder
-		records []ProcurementRecord
+		records []Record
 	)
 
 	for rows.Next() {
 		row, _ := rows.Columns()
 
 		if i == 0 {
-			dec = NewRecordDecoder(row)
+			dec = NewRecordDecoder(row, recordType)
 		} else {
 			record, err := dec.UnmarshalRow(row)
 			if err != nil {
