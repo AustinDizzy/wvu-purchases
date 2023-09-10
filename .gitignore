@@ -3,3 +3,4 @@
 go.work
 *.exe
 wvupurchases
+.DS_Store
