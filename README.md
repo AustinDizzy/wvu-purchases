@@ -10,10 +10,10 @@ This project provides and a SQLite(3) database of purchase records from [West Vi
 
 All information has been sourced from WVU over the course of many years via WVFOIA (W.Va. Code § 29B-1-1), and the intent is to keep the database updated on a rolling fiscal year basis as the University releases information.
 
-Current data spans from **Oct 3, 2010** to **Dec 2, 2021**⁺.
+Current data spans from **Oct 3, 2010** to **Dec 2, 2021**⁺, with over $2 billion dollars worth of transactions.
 
 <table>
-<tr><th>procurement_records</th><th>pcard_records</th></tr>
+<tr><th>procurement_records</th></tr>
 <tr><td>
 
 |year |date_range                |count|total_amount   |
@@ -53,7 +53,9 @@ ORDER BY
     year;
    ```
 </details>
-</td><td>
+</td></tr>
+<th>pcard_records</th>
+<tr><td>
 
 **** 
 |year |date_range                |count|total_amount   |
