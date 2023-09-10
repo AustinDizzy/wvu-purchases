@@ -57,7 +57,6 @@ ORDER BY
 <th>pcard_records</th>
 <tr><td>
 
-**** 
 |year |date_range                |count|total_amount   |
 |-----|--------------------------|-----|---------------|
 |2010 |2010-10-03 thru 2010-12-31|492  |$125,628.12    |
