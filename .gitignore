@@ -4,4 +4,4 @@ go.work
 *.exe
 wvupurchases
 .DS_Store
-.db
+*.db
