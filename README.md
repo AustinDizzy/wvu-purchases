@@ -1,16 +1,23 @@
 # wvu-purchases 💸
 
+
+* a SQLite(3) database of purchase records from [West Virginia University](https://wvu.edu)
+    * see the [Releases](https://github.com/AustinDizzy/wvu-purchases/releases) tab to download the current purchases.db
+* a web-accessible way to browse and query the database using the [Datsette](https://datasette.io) project
+    * see https://l.abs.codes/data/wvu-purchases
+* a simple command-line tool to help project admins manage database updates from the various formats (in Excel) used by the [WVU Office of Procurement Contracting & Payment Services](https://procurement.wvu.edu/)
+    * see [./cmd/wvupurchases](./cmd/wvupurchases/)
+
+### License
 ![Creative Commons Zero v1.0](https://licensebuttons.net/p/zero/1.0/88x15.png)
 
-**NOTE**: This is currently a work in progress.
+This project is released into the public domain via Creative Commons Zero. See the [LICENSE](./LICENSE) file.
 
-This project provides and a SQLite(3) database of purchase records from [West Virginia University](https://wvu.edu), a web-accessible way to browse and query the database using the [Datsette](https://datasette.io) project, and a simple command-line tool to help project admins manage database updates from the various formats (in Excel) used by the [WVU Office of Procurement Contracting & Payment Services](https://procurement.wvu.edu/).
+## Data
 
-### Data
+All information has been sourced from WVU over the course of many years via WVFOIA (W.Va. Code § 29B-1-1) (w/ special thanks to Walter Hardy), and the intent is to keep the database updated on a rolling fiscal year basis as the University releases information.
 
-All information has been sourced from WVU over the course of many years via WVFOIA (W.Va. Code § 29B-1-1), and the intent is to keep the database updated on a rolling fiscal year basis as the University releases information.
-
-Current data spans from **Oct 3, 2010** to **Dec 2, 2021**⁺, with over $2 billion dollars worth of transactions.
+Current data spans from **Oct 3, 2010** to **Dec 2, 2021**⁺, with over $2 billion dollars worth of transactions. See [./data/schema.sql](./data/schema.sql) for database schema.
 
 <table>
 <tr><th>procurement_records</th></tr>
@@ -95,7 +102,3 @@ ORDER BY
    ```
 </details>
 </td></tr> </table>
-
-### License
-
-This project is released into the public domain via Creative Commons Zero. See the [LICENSE](./LICENSE) file.
