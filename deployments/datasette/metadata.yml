@@ -1,0 +1,22 @@
+---
+title: Purchases made by West Virginia University (2010-2021)
+description: Purchases (requisition and purchase order via PCPS, and individual
+  PCard purchases with level 3 transaction info) made by West Virginia University
+  from 2010-03-10 to 2021-02-12.  Over 10 years and $2 billion of purchase information.
+  Download the source .XLSX files and compiled SQLite(3) .db file from the GitHub repository in the About link.
+license: PDDL
+license_url: https://opendatacommons.org/licenses/pddl/
+source: West Virginia University Office of Procurement Contracting & Payment Services
+source_url: https://procurement.wvu.edu/
+about_url: https://github.com/AustinDizzy/wvu-purchases
+databases:
+  purchases:
+    tables:
+      procurement_records:
+        facets: [supplier, category]
+        sort_desc: approved_date
+      pcard_records:
+        facets: [ebo, reports_to]
+        sort_desc: trans_date
+      expense_types:
+        sort_desc: segment_value
